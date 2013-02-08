@@ -4,6 +4,7 @@ import graph
 import pygame
 import random
 import math
+import os
 
 class level_data:
     width = 1
@@ -176,7 +177,9 @@ def init_game(level):
     return mygame
     
 def continue_game(mygame, level):
-    f = data.load('game.sav')
+    homepath = os.environ["HOME"] + '/.stringrolled/'
+    if not os.path.exists(homepath): os.makedirs(homepath)
+    f = data.load(homepath + 'game.sav')
     save = cPickle.load(f)
     f.close()
     mygame.cat.x = save.cat_x
@@ -210,7 +213,9 @@ def save_game(x, y, mygame):
     save.ball_x = x + 24
     save.ball_y = y + 16
     save.character = mygame.character
-    f = data.load('game.sav', 'wb')
+    homepath = os.environ["HOME"] + '/.stringrolled/'
+    if not os.path.exists(homepath): os.makedirs(homepath)
+    f = data.load(homepath + 'game.sav', 'wb')
     cPickle.dump(save, f)
     f.close()
     
