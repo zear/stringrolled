@@ -16,6 +16,7 @@ import game
 def main():
     graphics = graph.init_video()
     graphics.screen.fill((32, 0, 64))
+    pygame.mouse.set_visible(0)
     pygame.display.flip()
     level = game.load_level()
     mygame = game.init_game(level)
