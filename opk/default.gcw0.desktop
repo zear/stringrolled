@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Stringrolled
-Comment=Help a cat and a princess escape a castle in this _epic_ platformer title
+Comment=Help a cat and a princess escape a castle
 Exec=run_game.py
 Terminal=false
 Type=Application
