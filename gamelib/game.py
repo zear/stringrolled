@@ -1564,7 +1564,7 @@ def game(mygame, level, graphics):
     random.seed()
     next = "menu"
     while game_quit == 0:
-        clock.tick(60)
+        clock.tick() #SQ-parameter should be 60 when not optimizing, changed to 0 for now
         print clock.get_fps() # FPS computed by averaging the last few calls to Clock.tick
         time = pygame.time.get_ticks() - ticks
         if time > 50:
