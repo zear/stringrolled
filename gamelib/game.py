@@ -1,3 +1,4 @@
+import gc ; gc.disable()
 import data
 import cPickle
 import graph

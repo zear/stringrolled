@@ -6,6 +6,7 @@ Feel free to put all your game code here, or in other modules in this "gamelib"
 package.
 '''
 
+import gc ; gc.disable()
 import data
 import pygame
 import graph
