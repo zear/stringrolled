@@ -1562,14 +1562,19 @@ def game(mygame, level, graphics):
     ticks = pygame.time.get_ticks()
     random.seed()
     next = "menu"
+    ticks_when_fps_was_last_displayed = 0
     while game_quit == 0:
         clock.tick() #SQ-parameter should be 60 when not optimizing, changed to 0 for now
-        print clock.get_fps() # FPS computed by averaging the last few calls to Clock.tick
-        time = pygame.time.get_ticks() - ticks
+        cur_ticks = pygame.time.get_ticks()
+        time = cur_ticks - ticks
+        if (cur_ticks - ticks_when_fps_was_last_displayed) > 1000:
+            # only display fps ever second or so, not every frame
+            print clock.get_fps() # FPS computed by averaging the last few calls to Clock.tick
+            ticks_when_fps_was_last_displayed = cur_ticks
         if time > 50:
             time = 50
         mygame.time = time
-        ticks = pygame.time.get_ticks()
+        ticks = cur_ticks
         pygame.event.pump()
         keys = pygame.key.get_pressed()
         if(keys[pygame.K_ESCAPE] == 1):
