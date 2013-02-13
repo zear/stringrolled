@@ -11,8 +11,8 @@ def init_editor():
     return editor
     
 def load_tileset(filename, graphics):
-    factor_x = int(graphics.resolution_x/640)
-    factor_y = int(graphics.resolution_y/400)
+    factor_x = graphics.resolution_x/640.0
+    factor_y = graphics.resolution_y/400.0
     tile_w = 16*factor_x
     tile_h = 16*factor_y
     img = pygame.image.load(filename)
@@ -28,8 +28,8 @@ def load_tileset(filename, graphics):
         i += 1
 
 def load_spriteset(filename, graphics):
-    factor_x = int(graphics.resolution_x/640)
-    factor_y = int(graphics.resolution_y/400)
+    factor_x = graphics.resolution_x/640.0
+    factor_y = graphics.resolution_y/400.0
     tile_w = 16*factor_x
     tile_h = 16*factor_y
     img = pygame.image.load(filename)
@@ -45,8 +45,8 @@ def load_spriteset(filename, graphics):
         i += 1
     
 def draw_screen(editor, level, graphics):
-    factor_x = int(graphics.resolution_x/640)
-    factor_y = int(graphics.resolution_y/400)
+    factor_x = graphics.resolution_x/640.0
+    factor_y = graphics.resolution_y/400.0
     tile_w = 16*factor_x
     tile_h = 16*factor_y
     graphics.screen.fill((32, 0, 64))
@@ -130,8 +130,8 @@ def draw_screen(editor, level, graphics):
 
 
 def edit(level, graphics):
-    factor_x = int(graphics.resolution_x/640)
-    factor_y = int(graphics.resolution_y/400)
+    factor_x = graphics.resolution_x/640.0
+    factor_y = graphics.resolution_y/400.0
     tile_w = 16*factor_x
     tile_h = 16*factor_y
     editor = init_editor()
