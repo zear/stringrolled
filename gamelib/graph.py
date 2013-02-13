@@ -124,21 +124,15 @@ def free_video():
     pygame.display.quit()
 
 def draw_screen(graphics):
-    #SQ - optimized math and dereferencing extensively:
+    #SQ - optimized math, logic, and dereferencing extensively:
+    #SQ - NOTE: the truth is that in this game, the level width is always 512 and height is 256, NO MATTER WHAT,
+    #       even the editor does not allow expanding beyond that, and that allows a lot of optimizations here
+    #       and elsewhere
     x = 0
 
-    lscroll_x = graphics.scroll_x
-    lscroll_y = graphics.scroll_y
-    liscroll_x = int(lscroll_x)
-    liscroll_y = int(lscroll_y)
+    liscroll_x = int(graphics.scroll_x)
+    liscroll_y = int(graphics.scroll_y)
     tile_x = liscroll_x >> 4
-    ltilemap_width = graphics.tilemap_width
-    ltilemap_height = graphics.tilemap_height
-    ltile_w = graphics.tile_w
-    ltile_h = graphics.tile_h
-
-    lscroll_x_mod_16 = lscroll_x%16
-    lscroll_y_mod_16 = lscroll_y%16
 
     gfxtm=graphics.tilemap
     gfxts=graphics.tileset
@@ -149,28 +143,38 @@ def draw_screen(graphics):
     gfxspritec = graphics.sprite_c
     gfxblit=graphics.screen.blit
 
+    liscroll_y_div_16 = liscroll_y >> 4
+    liscroll_x_mod_16 = liscroll_x%16
+    liscroll_y_mod_16 = liscroll_y%16
+
     while x < 21:
         y = 0
-        tile_y = liscroll_y >> 4
+        tile_y = liscroll_y_div_16
 
         while y < 14:
-            if tile_x < ltilemap_width \
-              and tile_y < ltilemap_height \
+            if tile_x < 512 \
+              and tile_y < 256 \
               and tile_x >= 0 \
               and tile_y >= 0:
-                tile = gfxtm[tile_y * ltilemap_width + tile_x]
+                tile = gfxtm[(tile_y << 9) + tile_x]
                 gfxblit(gfxts, \
-                        (x*ltile_w-lscroll_x_mod_16, y*ltile_h-lscroll_y_mod_16), 
-                        ((tile%16)*ltile_w, (tile>>4)*ltile_h, ltile_w, ltile_h))
+                        ((x<<4)-liscroll_x_mod_16, (y<<4)-liscroll_y_mod_16), 
+                        ((tile%16)<<4, (tile>>4)<<4, 16, 16))
             y += 1
             tile_y += 1
         x += 1
         tile_x += 1
     i=0
     while i < graphics.sprites:
-        gfxblit(gfxss, ((gfxspritex[i] - lscroll_x*gfxsprites[i]), \
-            (gfxspritey[i] - lscroll_y*gfxsprites[i])), \
-            ((gfxspritec[i]%16)*ltile_w, (gfxspritec[i]>>4)*ltile_h, ltile_w, ltile_h))
+        if gfxsprites[i]:
+            gfxblit(gfxss, ((gfxspritex[i] - liscroll_x), \
+            (gfxspritey[i] - liscroll_y)), \
+            ((gfxspritec[i]%16)<<4, (gfxspritec[i]>>4)<<4, 16, 16))
+
+        else:
+            gfxblit(gfxss, ((gfxspritex[i]), \
+                (gfxspritey[i])), \
+                ((gfxspritec[i]%16)<<4, (gfxspritec[i]>>4)<<4, 16, 16))
         i += 1
     graphics.sprites = 0
     
