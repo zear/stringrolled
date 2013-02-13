@@ -77,7 +77,16 @@ def main_menu(mygame, level, graphics):
                 if menu_selection == 0:
                     next = "play"
                     mygame.ingame = 1
-                    game.continue_game(mygame, level)
+                    # SQ - this game crashed if this option was selected with no existing save data..
+                    #    So, I made continue_game return immediately if it checked and found no data
+                    #    and if we get to the next line that is indeed the case. Instead of crashing,
+                    #    we'll now just start a new game by copying the three lines for menu selection
+                    #    1 below and pasting them here:
+                    #game.continue_game(mygame, level)
+                    if not game.continue_game(mygame, level):
+                        next = "intro"
+                        mygame.ingame = 1
+                        game.new_game(mygame, level)
                 if menu_selection == 1:
                     next = "intro"
                     mygame.ingame = 1

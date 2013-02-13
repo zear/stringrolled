@@ -179,6 +179,9 @@ def init_game(level):
 def continue_game(mygame, level):
     homepath = os.environ["HOME"] + '/.stringrolled/'
     if not os.path.exists(homepath): os.makedirs(homepath)
+    #SQ: added check to see if this file even exists before trying to blindly load it and maybe crashing:
+    if not data.exists(homepath + 'game.sav'):
+        return False
     f = data.load(homepath + 'game.sav')
     save = cPickle.load(f)
     f.close()
@@ -199,7 +202,7 @@ def continue_game(mygame, level):
         i += 1
         i2 += 1
     mygame.fill_all = 1
-    return
+    return True
 
 def new_game(mygame, level):
     return
