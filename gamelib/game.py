@@ -1551,7 +1551,7 @@ def game(mygame, level, graphics):
     clock = pygame.time.Clock()
     f = data.load("sprites.png")
     graph.load_spriteset(f, graphics)
-    #SQ - converted prismtrap.it to a pre-rendered WAV file for FPS increase:
+    #SQ - converted prismtrap.it to a pre-rendered OGG file for FPS increase:
     path = data.filepath("prismtrap.ogg")
     pygame.mixer.music.load(path)
     pygame.mixer.music.play(-1, 0)
