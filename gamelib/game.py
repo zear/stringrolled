@@ -1549,7 +1549,6 @@ def step(time, gamepad, mygame, level, graphics):
     
 def game(mygame, level, graphics):
     clock = pygame.time.Clock()
-    #print clock.get_fps()
     f = data.load("sprites.png")
     graph.load_spriteset(f, graphics)
     path = data.filepath("prismtrap.it")
