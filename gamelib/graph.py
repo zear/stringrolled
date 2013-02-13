@@ -81,8 +81,11 @@ def draw_sprite_multi(c, x, y, w, h, graphics):
         i = 0
         while i < w:
             if graphics.sprites < 256:
-                graphics.sprite_x[graphics.sprites] = x + i*16
-                graphics.sprite_y[graphics.sprites] = y + i2*16
+                #SQ - optimizing integer math
+#                graphics.sprite_x[graphics.sprites] = x + i*16
+#                graphics.sprite_y[graphics.sprites] = y + i2*16
+                graphics.sprite_x[graphics.sprites] = x + (i<<4)
+                graphics.sprite_y[graphics.sprites] = y + (i2<<4)
                 graphics.sprite_c[graphics.sprites] = c + i3
                 graphics.sprite_s[graphics.sprites] = 1
                 graphics.sprites += 1
@@ -105,8 +108,11 @@ def draw_sprite_static_multi(c, x, y, w, h, graphics):
         i = 0
         while i < w:
             if graphics.sprites < 256:
-                graphics.sprite_x[graphics.sprites] = x + i*16
-                graphics.sprite_y[graphics.sprites] = y + i2*16
+                #SQ - optimizing integer math
+#                graphics.sprite_x[graphics.sprites] = x + i*16
+#                graphics.sprite_y[graphics.sprites] = y + i2*16
+                graphics.sprite_x[graphics.sprites] = x + (i<<4)
+                graphics.sprite_y[graphics.sprites] = y + (i2<<4)
                 graphics.sprite_c[graphics.sprites] = c + i3
                 graphics.sprite_s[graphics.sprites] = 0
                 graphics.sprites += 1
@@ -118,25 +124,53 @@ def free_video():
     pygame.display.quit()
 
 def draw_screen(graphics):
+    #SQ - optimized math and dereferencing extensively:
     x = 0
-    tile_x = int(graphics.scroll_x/16)
+
+    lscroll_x = graphics.scroll_x
+    lscroll_y = graphics.scroll_y
+    liscroll_x = int(lscroll_x)
+    liscroll_y = int(lscroll_y)
+    tile_x = liscroll_x >> 4
+    ltilemap_width = graphics.tilemap_width
+    ltilemap_height = graphics.tilemap_height
+    ltile_w = graphics.tile_w
+    ltile_h = graphics.tile_h
+
+    lscroll_x_mod_16 = lscroll_x%16
+    lscroll_y_mod_16 = lscroll_y%16
+
+    gfxtm=graphics.tilemap
+    gfxts=graphics.tileset
+    gfxss=graphics.spriteset
+    gfxspritex = graphics.sprite_x
+    gfxspritey = graphics.sprite_y
+    gfxsprites = graphics.sprite_s
+    gfxspritec = graphics.sprite_c
+    gfxblit=graphics.screen.blit
+
     while x < 21:
         y = 0
-        tile_y = int(graphics.scroll_y/16)
+        tile_y = liscroll_y >> 4
+
         while y < 14:
-            if tile_x < graphics.tilemap_width \
-              and tile_y < graphics.tilemap_height \
+            if tile_x < ltilemap_width \
+              and tile_y < ltilemap_height \
               and tile_x >= 0 \
               and tile_y >= 0:
-                tile = graphics.tilemap[tile_y * graphics.tilemap_width + tile_x]
-                graphics.screen.blit(graphics.tileset, (x*graphics.tile_w - (graphics.scroll_x % 16)*graphics.factor_x, y*graphics.tile_h - (graphics.scroll_y % 16)*graphics.factor_y), ((tile%16)*graphics.tile_w, (tile/16)*graphics.tile_h, graphics.tile_w, graphics.tile_h))
+                tile = gfxtm[tile_y * ltilemap_width + tile_x]
+                graphics.screen.blit(gfxts, \
+                        (x*ltile_w-lscroll_x_mod_16, y*ltile_h-lscroll_y_mod_16), 
+                        ((tile%16)*ltile_w, (tile>>4)*ltile_h, ltile_w, ltile_h))
             y += 1
             tile_y += 1
         x += 1
         tile_x += 1
     i=0
     while i < graphics.sprites:
-        graphics.screen.blit(graphics.spriteset, ((graphics.sprite_x[i] - graphics.scroll_x*graphics.sprite_s[i])*graphics.factor_x, (graphics.sprite_y[i] - graphics.scroll_y*graphics.sprite_s[i])*graphics.factor_y), ((graphics.sprite_c[i]%16)*graphics.tile_w, (graphics.sprite_c[i]/16)*graphics.tile_h, graphics.tile_w, graphics.tile_h))
+        graphics.screen.blit(gfxss, ((gfxspritex[i] - lscroll_x*gfxsprites[i]), \
+            (gfxspritey[i] - lscroll_y*gfxsprites[i])), \
+            ((gfxspritec[i]%16)*ltile_w, (gfxspritec[i]>>4)*ltile_h, ltile_w, ltile_h))
         i += 1
     graphics.sprites = 0
     
