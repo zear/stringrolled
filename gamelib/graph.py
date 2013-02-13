@@ -159,7 +159,7 @@ def draw_screen(graphics):
               and tile_x >= 0 \
               and tile_y >= 0:
                 tile = gfxtm[tile_y * ltilemap_width + tile_x]
-                graphics.screen.blit(gfxts, \
+                gfxblit(gfxts, \
                         (x*ltile_w-lscroll_x_mod_16, y*ltile_h-lscroll_y_mod_16), 
                         ((tile%16)*ltile_w, (tile>>4)*ltile_h, ltile_w, ltile_h))
             y += 1
@@ -168,7 +168,7 @@ def draw_screen(graphics):
         tile_x += 1
     i=0
     while i < graphics.sprites:
-        graphics.screen.blit(gfxss, ((gfxspritex[i] - lscroll_x*gfxsprites[i]), \
+        gfxblit(gfxss, ((gfxspritex[i] - lscroll_x*gfxsprites[i]), \
             (gfxspritey[i] - lscroll_y*gfxsprites[i])), \
             ((gfxspritec[i]%16)*ltile_w, (gfxspritec[i]>>4)*ltile_h, ltile_w, ltile_h))
         i += 1
