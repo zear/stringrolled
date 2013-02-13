@@ -1608,7 +1608,6 @@ def game(mygame, level, graphics):
         step(time, gamepad, mygame, level, graphics)
 
         graph.draw_screen(graphics)
-        pygame.time.wait(1)
         i += 1
     pygame.mixer.music.stop()
     return next
