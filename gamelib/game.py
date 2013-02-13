@@ -130,7 +130,7 @@ def init_game(level):
     mygame.ball_is_deadly = 0
     
     
-    pygame.mixer.init()
+    pygame.mixer.init(frequency=44100, size=-16, channels=1, buffer=2048)
     f = data.load("Sfx000.ogg")
     mygame.sound_0 = pygame.mixer.Sound(f)
     f = data.load("Sfx001.ogg")
