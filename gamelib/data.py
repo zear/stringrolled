@@ -22,3 +22,7 @@ def load(filename, mode='rb'):
     '''
     return open(os.path.join(data_dir, filename), mode)
 
+#SQ: added function to determine if a file exists
+def exists(filename):
+    return os.path.isfile( os.path.join(data_dir, filename) )
+
