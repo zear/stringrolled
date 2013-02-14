@@ -20,6 +20,8 @@ class graphics_data:
     sprite_s = [0 for i in range(256)]
     sprites = 0
     i = 0
+    #SQ - had to make the game skip rendering the tileset every other frame because not achieving 60fps broke the physics
+    skipped_last_frame = True 
 
 
 
@@ -134,6 +136,13 @@ def draw_screen(graphics):
     #SQ - NOTE: the truth is that in this game, the level width is always 512 and height is 256, NO MATTER WHAT,
     #       even the editor does not allow expanding beyond that, and that allows a lot of optimizations here
     #       and elsewhere
+    if graphics.skipped_last_frame:
+        graphics.skipped_last_frame = False
+    else:
+        graphics.skipped_last_frame = True
+        graphics.sprites = 0
+        return
+
     x = 0
     liscroll_x = int(graphics.scroll_x)
     liscroll_y = int(graphics.scroll_y)
