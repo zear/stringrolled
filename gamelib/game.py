@@ -1569,15 +1569,19 @@ def game(mygame, level, graphics):
     next = "menu"
     ticks_when_fps_was_last_displayed = 0
     while game_quit == 0:
-        clock.tick() #SQ-parameter should be 60 when not optimizing, changed to 0 for now
+        clock.tick(60) #Game runs at 60Hz, but drawing occurs at only 30Hz because we couldn't get it fullspeed and physics breaks on GCW
         cur_ticks = pygame.time.get_ticks()
         time = cur_ticks - ticks
-        if (cur_ticks - ticks_when_fps_was_last_displayed) > 1000:
-            # only display fps ever second or so, not every frame
-            print clock.get_fps() # FPS computed by averaging the last few calls to Clock.tick
+        if (cur_ticks - ticks_when_fps_was_last_displayed) > 1000: # only display fps ever second or so, not every frame
+            print clock.get_fps() / 2 # FPS computed by averaging the last few calls to Clock.tick, with frame skip 1 accounted for
             ticks_when_fps_was_last_displayed = cur_ticks
         if time > 50:
             time = 50
+
+        # added frameskip of 1, 30FPS drawing with game running at 60FPS, need to account for skipped frames here (33.333ms = 1/30 of a second)
+        if not graphics.skipped_last_frame:
+            mygame.time=33
+
         mygame.time = time
         ticks = cur_ticks
         pygame.event.pump()
