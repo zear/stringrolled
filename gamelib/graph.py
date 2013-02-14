@@ -130,11 +130,9 @@ def draw_screen(graphics):
     #       even the editor does not allow expanding beyond that, and that allows a lot of optimizations here
     #       and elsewhere
     x = 0
-
     liscroll_x = int(graphics.scroll_x)
     liscroll_y = int(graphics.scroll_y)
     tile_x = liscroll_x >> 4
-
     gfxtm=graphics.tilemap
     gfxts=graphics.tileset
     gfxss=graphics.spriteset
@@ -143,39 +141,36 @@ def draw_screen(graphics):
     gfxsprites = graphics.sprite_s
     gfxspritec = graphics.sprite_c
     gfxblit=graphics.screen.blit
-
     liscroll_y_div_16 = liscroll_y >> 4
-    liscroll_x_mod_16 = liscroll_x%16
-    liscroll_y_mod_16 = liscroll_y%16
+    liscroll_x_mod_16 = liscroll_x & 0xF
+    liscroll_y_mod_16 = liscroll_y & 0xF
 
     while x < 21:
         y = 0
         tile_y = liscroll_y_div_16
-
         while y < 14:
-            if tile_x < 512 \
-              and tile_y < 256 \
-              and tile_x >= 0 \
-              and tile_y >= 0:
-                tile = gfxtm[(tile_y << 9) + tile_x]
-                gfxblit(gfxts, \
+            if (0 <= tile_y < 256) and (0 <= tile_x < 512):
+                tile = gfxtm[(tile_y << 9)+tile_x]
+                gfxblit(gfxts, 
                         ((x<<4)-liscroll_x_mod_16, (y<<4)-liscroll_y_mod_16), 
-                        ((tile%16)<<4, (tile>>4)<<4, 16, 16))
+                        ((tile & 0xF)<<4, tile&0xFFF0, 16, 16))
             y += 1
             tile_y += 1
         x += 1
         tile_x += 1
     i=0
-    while i < graphics.sprites:
+    numsprites = graphics.sprites
+    while i < numsprites:
+        gfxspritec_val=gfxspritec[i];
         if gfxsprites[i]:
-            gfxblit(gfxss, ((gfxspritex[i] - liscroll_x), \
-            (gfxspritey[i] - liscroll_y)), \
-            ((gfxspritec[i]%16)<<4, (gfxspritec[i]>>4)<<4, 16, 16))
+            gfxblit(gfxss, 
+                    ((gfxspritex[i] - liscroll_x), (gfxspritey[i] - liscroll_y)),
+                    ((gfxspritec_val & 0xF)<<4, gfxspritec_val & 0xFFF0, 16, 16))
 
         else:
-            gfxblit(gfxss, ((gfxspritex[i]), \
-                (gfxspritey[i])), \
-                ((gfxspritec[i]%16)<<4, (gfxspritec[i]>>4)<<4, 16, 16))
+            gfxblit(gfxss, ((gfxspritex[i]), 
+                    (gfxspritey[i])),
+                    ((gfxspritec_val & 0xF)<<4, gfxspritec_val & 0xFFF0, 16, 16))
         i += 1
     graphics.sprites = 0
     
