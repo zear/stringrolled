@@ -136,12 +136,14 @@ def draw_screen(graphics):
     #SQ - NOTE: the truth is that in this game, the level width is always 512 and height is 256, NO MATTER WHAT,
     #       even the editor does not allow expanding beyond that, and that allows a lot of optimizations here
     #       and elsewhere
-    if graphics.skipped_last_frame:
-        graphics.skipped_last_frame = False
-    else:
-        graphics.skipped_last_frame = True
-        graphics.sprites = 0
-        return
+    
+    #SQ - disabled frame skipping experiment for now:
+#    if graphics.skipped_last_frame:
+#        graphics.skipped_last_frame = False
+#    else:
+#        graphics.skipped_last_frame = True
+#        graphics.sprites = 0
+#        return
 
     x = 0
     liscroll_x = int(graphics.scroll_x)
