@@ -108,7 +108,7 @@ def load_img(file, graphics):
     img = pygame.image.load(file)
     buff = pygame.Surface((320*graphics.factor_x, 200*graphics.factor_y), pygame.SWSURFACE, 32)
     buff2 = pygame.Surface((320*graphics.factor_x, 200*graphics.factor_y), pygame.SWSURFACE, 32)
-    img.convert(32, pygame.SWSURFACE)
+    img.convert()
     i = 0
     while i < 320*graphics.factor_x:
         buff.blit(img, (i, 0), (i/graphics.factor_x, 0, 1, 200))

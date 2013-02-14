@@ -42,8 +42,8 @@ def init_video():
 
 def load_tileset(file, graphics):
     img = pygame.image.load(file)
-    buff = pygame.Surface((256*graphics.factor_x, 256*graphics.factor_y), pygame.HWSURFACE, 32)
-    img.convert(32, pygame.HWSURFACE)
+    buff = pygame.Surface((256*graphics.factor_x, 256*graphics.factor_y), pygame.SWSURFACE, 32)
+    img.convert()
     i = 0
     while i < 256*graphics.factor_x:
         buff.blit(img, (i, 0), (i/graphics.factor_x, 0, 1, 256))
@@ -52,11 +52,12 @@ def load_tileset(file, graphics):
     while i < 256*graphics.factor_y:
         graphics.tileset.blit(buff, (0, i), (0, i/graphics.factor_y, 256*graphics.factor_x, 1))
         i += 1
+    graphics.tileset.convert()
 
 def load_spriteset(file, graphics):
     img = pygame.image.load(file)
-    buff = pygame.Surface((256*graphics.factor_x, 512*graphics.factor_y), pygame.HWSURFACE, 32)
-    img.convert(32, pygame.HWSURFACE)
+    buff = pygame.Surface((256*graphics.factor_x, 512*graphics.factor_y), pygame.SWSURFACE, 32)
+    img.convert()
     i = 0
     while i < 256*graphics.factor_x:
         buff.blit(img, (i, 256), (i/graphics.factor_x, 0, 1, 256))
@@ -67,6 +68,8 @@ def load_spriteset(file, graphics):
         graphics.spriteset.blit(buff, (0, i), (0, i/graphics.factor_y, 256*graphics.factor_x, 1))
         graphics.spriteset.blit(buff, (0, i+256*graphics.factor_y), (0, i/graphics.factor_y + 256, 256*graphics.factor_x, 1))
         i += 1
+    graphics.spriteset.convert()
+
 
 def draw_sprite(c, x, y, graphics):
     if graphics.sprites < 256:
@@ -124,6 +127,7 @@ def draw_sprite_static_multi(c, x, y, w, h, graphics):
         
 def free_video():
     pygame.display.quit()
+
 
 def draw_screen(graphics):
     #SQ - optimized math, logic, and dereferencing extensively:
