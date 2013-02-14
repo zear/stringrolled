@@ -17,8 +17,8 @@ def load_tileset(filename, graphics):
     tile_w = 16*factor_x
     tile_h = 16*factor_y
     img = pygame.image.load(filename)
-    buff = pygame.Surface((256*factor_x, 256*factor_y), pygame.HWSURFACE, 32)
-    img.convert(32, pygame.HWSURFACE)
+    buff = pygame.Surface((256*factor_x, 256*factor_y), pygame.SWSURFACE, 32)
+    img.convert(32, pygame.SWSURFACE)
     i = 0
     while i < 256*factor_x:
         buff.blit(img, (i, 0), (i/factor_x, 0, 1, 256))
@@ -34,8 +34,8 @@ def load_spriteset(filename, graphics):
     tile_w = 16*factor_x
     tile_h = 16*factor_y
     img = pygame.image.load(filename)
-    buff = pygame.Surface((256*factor_x, 256*factor_y), pygame.HWSURFACE, 32)
-    img.convert(32, pygame.HWSURFACE)
+    buff = pygame.Surface((256*factor_x, 256*factor_y), pygame.SWSURFACE, 32)
+    img.convert(32, pygame.SWSURFACE)
     i = 0
     while i < 256*factor_x:
         buff.blit(img, (i, 0), (i/factor_x, 0, 1, 256))
