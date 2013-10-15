@@ -1553,6 +1553,8 @@ def step(time, gamepad, mygame, level, graphics):
     
 def game(mygame, level, graphics):
     clock = pygame.time.Clock()
+    Joystick = pygame.joystick.Joystick(0)
+    Joystick.init()
     f = data.load("sprites.png")
     graph.load_spriteset(f, graphics)
     #SQ - converted prismtrap.it to a pre-rendered OGG file for FPS increase:
@@ -1586,20 +1588,66 @@ def game(mygame, level, graphics):
         mygame.time = time
         ticks = cur_ticks
         pygame.event.pump()
+
+        # Joystick input
+        can_move_x = 0
+        can_move_y = 1
+
+        # left-right
+        axis = Joystick.get_axis(0)
+        deadzone = 0.05
+        if axis < -deadzone:
+                gamepad.left = 1
+                gamepad.right = 0
+        elif axis > deadzone:
+                gamepad.left = 0
+                gamepad.right = 1
+        else:
+                gamepad.left = 0
+                gamepad.right = 0
+                can_move_x = 1
+
+        # up-down
+        """
+	# disabled for GCW0 as the player can jump with A
+	# and implementing this feature in joystick would
+	# unnecessarily complicate the code.
+
+	axis = Joystick.get_axis(1)
+	if axis < -deadzone:
+		gamepad.up = 1
+		gamepad.down = 0
+		if gamepad.jump != 0:
+			gamepad.jump = 2
+		else:
+			gamepad.jump = 0
+	elif axis > deadzone:
+		gamepad.up = 0
+		gamepad.down = 1
+	else:
+		gamepad.up = 0
+		gamepad.down = 0
+		can_move_y = 1
+        """
+
+        # Keyboard input
         keys = pygame.key.get_pressed()
         if(keys[pygame.K_ESCAPE] == 1):
             game_quit = 1
-        gamepad.left = keys[pygame.K_LEFT]
-        if gamepad.left == 0:
-            gamepad.right = keys[pygame.K_RIGHT]
-        else:
-            gamepad.right = 0;
-        gamepad.up = keys[pygame.K_UP] or keys[pygame.K_LCTRL]
-        gamepad.down = keys[pygame.K_DOWN]
+	if can_move_x:
+	        gamepad.left = keys[pygame.K_LEFT]
+	        if gamepad.left == 0:
+	            gamepad.right = keys[pygame.K_RIGHT]
+	        else:
+	            gamepad.right = 0;
+	if can_move_y:
+		gamepad.up = keys[pygame.K_UP] or keys[pygame.K_LCTRL]
+		gamepad.down = keys[pygame.K_DOWN]
         if keys[pygame.K_SPACE] and gamepad.toggle != 0:
             gamepad.toggle = 2
         else:
             gamepad.toggle = keys[pygame.K_SPACE]
+
         if (keys[pygame.K_UP] or keys[pygame.K_LCTRL]) and gamepad.jump != 0:
             gamepad.jump = 2
         else:
@@ -1618,5 +1666,6 @@ def game(mygame, level, graphics):
 
         graph.draw_screen(graphics)
         i += 1
+    Joystick.quit()
     pygame.mixer.music.stop()
     return next
