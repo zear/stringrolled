@@ -28,9 +28,8 @@ class graphics_data:
 def init_video():
     graphics = graphics_data()
     pygame.init()
-    #graphics.screen = pygame.display.set_mode((graphics.resolution_x,graphics.resolution_y), pygame.FULLSCREEN|pygame.HWSURFACE|pygame.DOUBLEBUF, 32)
-    #graphics.screen = pygame.display.set_mode((graphics.resolution_x,graphics.resolution_y), pygame.HWSURFACE|pygame.DOUBLEBUF, 32)
-    graphics.screen = pygame.display.set_mode((graphics.resolution_x,graphics.resolution_y), pygame.SWSURFACE, 32)
+    #graphics.screen = pygame.display.set_mode((graphics.resolution_x,graphics.resolution_y), pygame.FULLSCREEN|pygame.SWSURFACE|pygame.DOUBLEBUF, 32)
+    graphics.screen = pygame.display.set_mode((graphics.resolution_x,graphics.resolution_y), pygame.SWSURFACE|pygame.DOUBLEBUF, 32)
     graphics.tileset = pygame.Surface((256*graphics.factor_x, 256*graphics.factor_y), pygame.SWSURFACE, 32)
     graphics.tileset.fill((255, 0, 255))
     graphics.spriteset = pygame.Surface((256*graphics.factor_x, 512*graphics.factor_y), pygame.SWSURFACE, 32)
